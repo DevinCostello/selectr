@@ -1,0 +1,31 @@
+.container {
+    border: 1px solid grey;
+
+    margin-top: 50px;
+}
+
+ul {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+li {
+    list-style: none;
+    border: 1px solid grey;    
+}
+
+.listform {
+    display: flex;
+    flex-direction: column;
+}
+
+.active {
+    color: red
+}
+
+.listitem {
+    color: black
+}
