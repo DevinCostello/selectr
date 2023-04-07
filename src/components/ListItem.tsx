@@ -1,5 +1,4 @@
 import styles from '../styles/List.module.css'
-import React from 'react'
 
  interface ListItemProps  {
   item: string
