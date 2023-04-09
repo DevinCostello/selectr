@@ -1,37 +1,39 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styles from '../styles/List.module.css'
 import ListItem from './ListItem'
 
-interface ListProps  {
+interface List {
   title: string
-  list: string[]
-  // selectedItem: number | null
-  // AddItem(list: string[], item: string): void 
-  // DeleteItem(selectedItem: number | null): void
-  // RandomNumber(): number
-  // setSelectedItem: React.Dispatch<React.SetStateAction<number | null>>
+  items: string[]
 }
 
+const List = () => {
 
 
-const List = ({ title }: { title: string }) => {
-
+  const [list, setList] = useState<List | null>(null)
+  const [content, setContent] = useState<string[]>([]);
+  const [title, setTitle] = useState<string | null>(null)
+  //input onChange selection
   const [item, setItem] = useState<string>("");
-  const [list, setList] = useState<string[]>([]);
+  //stores index for selected item to toggle 'selected' style, or delete
   const [selectedItem, setSelectedItem] = useState<number | null>(null);
 
+
+  useEffect(() => {
+
+  }, [content, title])
   
   const DeleteItem = (selectedItem: number | null): void => {
-    setList(list.filter((item, index) => index !== selectedItem));
+    setContent(content.filter((item, index) => index !== selectedItem));
   };
   
-  const AddItem = (list: string[], item: string) => {
-    setList([...list, item]);
+  const AddItem = (content: string[], item: string) => {
+    setContent([...content, item]);
     setItem("");
   };
   
   const RandomNumber = (): number => {
-    return Math.floor(Math.random() * list.length);
+    return Math.floor(Math.random() * content.length);
   };
   
   return (
@@ -40,9 +42,9 @@ const List = ({ title }: { title: string }) => {
 
     <ul>
 
-    {list.map((item, index)=> 
+    {content.map((item, index)=> 
 
-    <ListItem key={index} item={item} index={index} selectedItem={selectedItem}/>
+    <ListItem key={index} item={item} index={index} selectedItem={selectedItem} />
     
     )}
 
@@ -50,9 +52,9 @@ const List = ({ title }: { title: string }) => {
 
     
 
-<form className={styles.listform} action="submit" onSubmit={(e) => e.preventDefault()}>
+<form className={styles.contentform} action="submit" onSubmit={(e) => e.preventDefault()}>
     <input value={item} type="text" onChange={(e: React.ChangeEvent<HTMLInputElement>) => setItem(e.target.value)} />
-    <button onClick={(e) => AddItem(list, item)}>Add</button>
+    <button onClick={(e) => AddItem(content, item)}>Add</button>
     <button onClick={() => DeleteItem(selectedItem)}>Delete Selection</button>
     <button onClick={() => setSelectedItem(RandomNumber())}>Choose Random</button>
 </form>
