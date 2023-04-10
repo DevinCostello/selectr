@@ -29,3 +29,26 @@ li {
 .listitem {
     color: black
 }
+
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.title input {
+    margin: 20px 0;
+    height: 25px;
+}
+
+.title h2 {
+    margin-right: 5px;
+}
+
+.titleActive {
+    display: block
+}
+
+.titleInactive {
+    display: none;
+}

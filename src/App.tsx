@@ -35,6 +35,11 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    //set updated lists array to localstorage
+    // localStorage.setItem('lists', lists)
+  },[lists])
+
   return (
     <main className="App">
 

@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import  { useState, useEffect, useRef } from 'react'
 import styles from '../styles/List.module.css'
+import { BiEdit } from 'react-icons/bi'
 import ListItem from './ListItem'
 
 interface ListType {
@@ -12,14 +13,21 @@ interface ListType {
 //   setLists:  Dispatch<SetStateAction<ListType[] | null>>
 // }
 
+//dont think this is needed
+
 const List = ({StorageList}: {StorageList: ListType}) => {
-
-
   const [list, setList] = useState<ListType | null>(null)
-  const [content, setContent] = useState<string[]>([]);
+  
   const [title, setTitle] = useState<string | null>(null)
-  //input onChange selection
+  const [editingTitle, setEditingTitle] = useState<boolean>(false)
+  const titleRef = useRef<HTMLInputElement>(null)
+
+  const [content, setContent] = useState<string[]>([]);
+
+
+  //input onChange selection, swap to useRef
   const [item, setItem] = useState<string>("");
+
   //stores index for selected item to toggle 'selected' style, or delete?
   const [selectedItem, setSelectedItem] = useState<number | null>(null);
 
@@ -32,6 +40,11 @@ if(StorageList) {
   setList(StorageList)
 }
   }, [])
+
+  useEffect(() => {
+    //set app level list array state to include changed list
+    //setLists({...lists, content: list})
+  },[list])
   
   const DeleteItem = (selectedItem: number | null): void => {
     setContent(content.filter((item, index) => index !== selectedItem));
@@ -45,11 +58,20 @@ if(StorageList) {
   const RandomNumber = (): number => {
     return Math.floor(Math.random() * content.length);
   };
+
   
+
+
   return (
     <main className={styles.container}>
-    <h2>{StorageList.name}</h2>
-
+  
+  <section className={styles.title}>
+    <h2 className={editingTitle ? styles.titleInactive : styles.titleActive}>{StorageList.name}</h2>
+    <input className={editingTitle ? styles.titleActive : styles.titleInactive} type="text" ref={titleRef}  />
+    <BiEdit onClick={() => setEditingTitle(!editingTitle)} size={28} />
+  </section>
+    
+    
     <ul>
 
     {list?.content.map((item, index)=> 
