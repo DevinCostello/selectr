@@ -2,22 +2,25 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import List from "./components/List";
 
+interface ListType {
+  name: string
+  content: string[]
+}
+
 function App() {
 
   //lists stored in localstorage as json string
-  const [lists, setLists] = useState<string | null>(null);
+  const [lists, setLists] = useState<ListType[] | null>(null);
 
-  //local 'lists' state value
-  const [localLists, setLocalLists] = useState<List[] | null>(null)
-
-  const Selectr = [
+  
+  const testData = [
     {
-      name: "listname",
-      content: ["item", "item2", "item3"],
+      name: "Movies",
+      content: ["Goodfellas", "The Big Lebowski", "Platoon"],
     },
     {
-      name: "listname",
-      content: ["item", "item2", "item3"],
+      name: "Anime",
+      content: ["My Hero Academia", "Berserk (1997)", "Akagi"],
     },
     {
       name: "listname",
@@ -25,21 +28,21 @@ function App() {
     }
   ];
 
-  const listsStorage = localStorage.getItem("lists");
-
   useEffect(() => {
-    setLists(listsStorage);
-  }, [localLists]);
+    const StorageValue = localStorage.getItem('lists')
+    if(StorageValue) {
+      setLists(JSON.parse(StorageValue))
+    }
+  }, []);
 
   return (
     <main className="App">
 
-      <button onClick={() => localStorage.setItem("lists", JSON.stringify(Selectr))}>Add</button>
+      <button onClick={() => localStorage.setItem("lists", JSON.stringify(testData))}>Add</button>
 
       <button onClick={() => localStorage.removeItem("lists")}>Remove</button>
 
-
-      {lists ? lists : '' }
+    {lists?.map((StorageList, index) => <List key={index} StorageList={StorageList} />)}
 
     </main>
   );

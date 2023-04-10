@@ -2,26 +2,36 @@ import { useState, useEffect } from 'react'
 import styles from '../styles/List.module.css'
 import ListItem from './ListItem'
 
-interface List {
-  title: string
-  items: string[]
+interface ListType {
+  name: string
+  content: string[]
 }
 
-const List = () => {
+// interface ListProps {
+//   lists: ListType[]
+//   setLists:  Dispatch<SetStateAction<ListType[] | null>>
+// }
+
+const List = ({StorageList}: {StorageList: ListType}) => {
 
 
-  const [list, setList] = useState<List | null>(null)
+  const [list, setList] = useState<ListType | null>(null)
   const [content, setContent] = useState<string[]>([]);
   const [title, setTitle] = useState<string | null>(null)
   //input onChange selection
   const [item, setItem] = useState<string>("");
-  //stores index for selected item to toggle 'selected' style, or delete
+  //stores index for selected item to toggle 'selected' style, or delete?
   const [selectedItem, setSelectedItem] = useState<number | null>(null);
 
 
-  useEffect(() => {
+  //naming is all over the place here...
 
-  }, [content, title])
+
+  useEffect(() => {
+if(StorageList) {
+  setList(StorageList)
+}
+  }, [])
   
   const DeleteItem = (selectedItem: number | null): void => {
     setContent(content.filter((item, index) => index !== selectedItem));
@@ -38,11 +48,11 @@ const List = () => {
   
   return (
     <main className={styles.container}>
-    <h2>{title}</h2>
+    <h2>{StorageList.name}</h2>
 
     <ul>
 
-    {content.map((item, index)=> 
+    {list?.content.map((item, index)=> 
 
     <ListItem key={index} item={item} index={index} selectedItem={selectedItem} />
     
