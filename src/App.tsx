@@ -9,7 +9,6 @@ interface ListType {
 
 function App() {
 
-  //lists stored in localstorage as json string
   const [lists, setLists] = useState<ListType[] | null>(null);
 
   
