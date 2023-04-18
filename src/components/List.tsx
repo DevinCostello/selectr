@@ -1,86 +1,88 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useReducer } from "react";
 import styles from "../styles/List.module.css";
 import { BiEdit } from "react-icons/bi";
 import ListItem from "./ListItem";
+import { useListReducer } from "../Reducer";
 
+interface ListProps {
+  list: ListType;
+  lists: ListType[];
+  setLists: React.Dispatch<React.SetStateAction<ListType[] | null>>;
+  deleteList(id: string): void
+}
 interface ListType {
   name: string;
+  id: string;
   content: string[];
 }
 
-const List = ({ StorageList }: { StorageList: ListType }) => {
-  const [list, setList] = useState<ListType | null>(null);
+const List = ({ list, lists, setLists, deleteList }: ListProps) => {
 
   const [editingTitle, setEditingTitle] = useState<boolean>(false);
-  const titleRef = useRef<HTMLInputElement>(null);
+  const [mounted, setMounted] = useState<boolean>(false)
+  const [selectedItem, setSelectedItem] = useState<number | null>(null);
 
+  const titleRef = useRef<HTMLInputElement>(null);
   const itemRef = useRef<HTMLInputElement>(null);
 
-  //stores index for selected item to toggle 'selected' style, or delete?
-  const [selectedItem, setSelectedItem] = useState<number | null>(0);
+  const { state: reducerState, addItem, deleteItem, changeTitle } = useListReducer(list)
 
-  //naming is all over the place here...
 
   useEffect(() => {
-    if (StorageList) {
-      setList(StorageList);
+    localStorage.setItem("lists", JSON.stringify(lists));
+  }, [lists]);
+
+
+  useEffect(() => {
+
+    const updatedLists = lists.map((obj) => {
+      if (obj.id === reducerState.id) {
+        return reducerState
+      } else {
+        return obj
+      }
+    })
+
+    if (mounted) {
+      setLists(updatedLists)
+    } else {
+      setMounted(true)
     }
-  }, []);
 
-  const AddItem = (list: ListType) => {
-    const itemRefValue = itemRef.current?.value ?? "";
-    setList({
-      ...list,
-      content: [...list?.content, itemRefValue],
-    });
 
-    if(itemRef.current)
-    {itemRef.current.value = ''}
+  }, [reducerState])
 
-  };
-
-  const DeleteItem = (list: ListType, selectedItem: number): void => {
-    setList({
-      ...list,
-      content: list.content.filter((item, index) => index !== selectedItem),
-    });
-    setSelectedItem(null);
-  };
 
   const RandomNumber = (list: ListType): number => {
     return Math.floor(Math.random() * list.content.length);
   };
 
-  const UpdateTitle = (list: ListType): void => {
-    const titleRefValue = titleRef.current?.value ?? "";
-    setList({ ...list, name: titleRefValue });
-    setEditingTitle(false);
-  };
 
   return (
     <main className={styles.container}>
-      <form
+      <form className={styles.title} action="submit"
         onSubmit={(e) => {
-          e.preventDefault();
-          UpdateTitle(list);
-        }}
-        className={styles.title}
+          e.preventDefault()
+          changeTitle(titleRef.current?.value ?? '')
+          setEditingTitle(false)
+        }
+        }
       >
-        <h2
-          className={editingTitle ? styles.titleInactive : styles.titleActive}
-        >
+        <h2 className={editingTitle ? styles.titleInactive : styles.titleActive}>
           {list?.name}
         </h2>
+
         <input
           className={editingTitle ? styles.titleActive : styles.titleInactive}
           type="text"
           ref={titleRef}
         />
+        <button onClick={() => deleteList(list.id)}>X</button>
         <BiEdit onClick={() => setEditingTitle(!editingTitle)} size={28} />
       </form>
 
       <ul>
-        {list?.content.map((item, index) => (
+        {list.content.map((item, index) => (
           <ListItem
             key={index}
             item={item}
@@ -96,12 +98,14 @@ const List = ({ StorageList }: { StorageList: ListType }) => {
         onSubmit={(e) => e.preventDefault()}
       >
         <input type="text" ref={itemRef} />
-        <button onClick={(e) => AddItem(list)}>Add</button>
-        <button onClick={() => DeleteItem(list, selectedItem)}>
-          Delete Selection
-        </button>
+        <button onClick={() => addItem(itemRef.current?.value ?? '')}>Add Item</button>
+        <button onClick={() => {
+          deleteItem(selectedItem)
+          setSelectedItem(null)
+        }
+        }>Delete Item</button>
         <button onClick={() => setSelectedItem(RandomNumber(list))}>
-          Choose Random
+          Roll
         </button>
       </form>
     </main>
@@ -109,3 +113,4 @@ const List = ({ StorageList }: { StorageList: ListType }) => {
 };
 
 export default List;
+export type { ListType }

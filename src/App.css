@@ -7,5 +7,12 @@
 
 .App {
   display: flex;
-  
+}
+
+.newlist {
+display: none;
+}
+
+.newlistopen {
+  display: block;
 }
