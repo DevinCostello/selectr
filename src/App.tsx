@@ -37,17 +37,16 @@ const newListRef = useRef<HTMLInputElement>(null);
   ];
 
   useEffect(() => {
-    const StorageValue = localStorage.getItem('lists')
-    if(StorageValue) {
-      setLists(JSON.parse(StorageValue))
-    }
+    const ListInStorage = localStorage.getItem('lists')
+    if(ListInStorage) {
+      //set stored lists to app level 'lists' state
+      setLists(JSON.parse(ListInStorage))
+    } 
   }, []);
 
   const createNewList = () => {
 
     const newListRefValue = newListRef.current?.value ?? "";
-
-    // lists can be created with title as empty string because of useref typescript bs
 
     if (newListRef.current) {
       newListRef.current.value = "";
@@ -72,15 +71,20 @@ const newListRef = useRef<HTMLInputElement>(null);
   const deleteList = (id: string): void => {
      const deletedLists = lists?.filter((list) => list.id !== id)
     setLists(deletedLists)
+
+    if(lists?.length === 1
+      ) {
+        localStorage.removeItem('lists')
+      }
   }
 
   return (
     <main className="App">
 
-      <button onClick={() => localStorage.setItem("lists", JSON.stringify(testData))}>Add</button>
-      <button onClick={() => localStorage.removeItem("lists")}>Remove</button>
+      {/* <button onClick={() => localStorage.setItem("lists", JSON.stringify(testData))}>Add</button>
+      <button onClick={() => localStorage.removeItem("lists")}>Remove</button> */}
 
-    {lists?.map((list, index) => <List key={index} list={list} lists={lists} setLists={setLists} deleteList={deleteList} />)}
+    {lists?.map((list, index) => <List key={list.id} list={list} lists={lists} setLists={setLists} deleteList={deleteList} />)}
 
     <BsPlusSquare onClick={() => setOpenNewList(!openNewList)} size={24} />
 

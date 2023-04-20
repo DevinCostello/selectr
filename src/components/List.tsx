@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useReducer } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "../styles/List.module.css";
 import { BiEdit } from "react-icons/bi";
 import ListItem from "./ListItem";
@@ -23,7 +23,9 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
   const [selectedItem, setSelectedItem] = useState<number | null>(null);
 
   const titleRef = useRef<HTMLInputElement>(null);
+  const [titleInputValue, setTitleInputValue] = useState<string>('')
   const itemRef = useRef<HTMLInputElement>(null);
+  const [itemInputValue, setItemInputValue] = useState<string>('')
 
   const { state: reducerState, addItem, deleteItem, changeTitle } = useListReducer(list)
 
@@ -52,7 +54,11 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
 
   }, [reducerState])
 
+  useEffect(() => {
+    titleRef.current?.focus()
+  }, [editingTitle])
 
+  
   const RandomNumber = (list: ListType): number => {
     return Math.floor(Math.random() * list.content.length);
   };
@@ -64,6 +70,7 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
         onSubmit={(e) => {
           e.preventDefault()
           changeTitle(titleRef.current?.value ?? '')
+          setTitleInputValue('')
           setEditingTitle(false)
         }
         }
@@ -76,10 +83,17 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
           className={editingTitle ? styles.titleActive : styles.titleInactive}
           type="text"
           ref={titleRef}
+          onChange={(e) => setTitleInputValue(e.target.value)}
+          value={titleInputValue}
         />
-        <button onClick={() => deleteList(list.id)}>X</button>
-        <BiEdit onClick={() => setEditingTitle(!editingTitle)} size={28} />
+        <BiEdit onClick={() => {
+          setEditingTitle(!editingTitle)
+          titleRef.current?.focus()
+        }
+        } size={28} />
       </form>
+
+      <button onClick={() => deleteList(list.id)}>X</button>
 
       <ul>
         {list.content.map((item, index) => (
@@ -88,6 +102,7 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
             item={item}
             index={index}
             selectedItem={selectedItem}
+            setSelectedItem={setSelectedItem}
           />
         ))}
       </ul>
@@ -97,8 +112,14 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
         action="submit"
         onSubmit={(e) => e.preventDefault()}
       >
-        <input type="text" ref={itemRef} />
-        <button onClick={() => addItem(itemRef.current?.value ?? '')}>Add Item</button>
+        <input
+          onChange={(e) => setItemInputValue(e.target.value)}
+          type="text" value={itemInputValue} ref={itemRef} />
+        <button onClick={() => {
+          addItem(itemRef.current?.value ?? '')
+          setItemInputValue('')
+        }
+        }>Add Item</button>
         <button onClick={() => {
           deleteItem(selectedItem)
           setSelectedItem(null)

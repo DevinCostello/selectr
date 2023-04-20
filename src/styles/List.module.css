@@ -31,12 +31,22 @@ button {
 
 .active {
     border: none;
-    color: magenta;
+    color: green;
+    border: 1px solid green;
+
+    padding: 0.5rem 0.25rem;
+
 }
 
 .listitem {
     color: black;
-    border: none;
+    border: 1px solid black;
+    padding: 0.5rem 0.25rem;
+
+}
+
+.listitem:hover {
+    cursor: pointer;
 }
 
 .title {
@@ -59,5 +69,5 @@ button {
 }
 
 .titleInactive {
-    display: none;
+display: none;
 }

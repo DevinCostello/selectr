@@ -4,12 +4,15 @@ import styles from '../styles/List.module.css'
   item: string
   index: number
   selectedItem: number | null
+  setSelectedItem: React.Dispatch<React.SetStateAction<number | null>>
  }
 
-const ListItem = ({ item, index, selectedItem }: ListItemProps) => {
+const ListItem = ({ item, index, selectedItem, setSelectedItem }: ListItemProps) => {
   return (
     <>
-    <li className={index === selectedItem ? styles.active : styles.listitem}>
+    <li
+    onClick={() => setSelectedItem(index)}
+    className={index === selectedItem ? styles.active : styles.listitem}>
       {item}
     </li>
     </>
