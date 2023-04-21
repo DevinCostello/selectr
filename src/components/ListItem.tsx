@@ -8,10 +8,21 @@ import styles from '../styles/List.module.css'
  }
 
 const ListItem = ({ item, index, selectedItem, setSelectedItem }: ListItemProps) => {
+
+const handleClick = (index: number) => {
+
+if(selectedItem === index) {
+  setSelectedItem(null)
+} else {
+  setSelectedItem(index)
+}
+
+}
+
   return (
     <>
     <li
-    onClick={() => setSelectedItem(index)}
+    onClick={() => handleClick(index)}
     className={index === selectedItem ? styles.active : styles.listitem}>
       {item}
     </li>

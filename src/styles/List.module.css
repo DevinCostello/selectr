@@ -1,9 +1,20 @@
 .container {
-    border: 1px solid grey;
+
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border: 1px solid lightgrey;
     border-radius: 5px;
-    height: 500px;
     width: 250px;
     margin-right: 20px;
+
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+
+
+
+    max-height: 550px;
+    overflow: auto;
+
 }
 
 ul {
@@ -16,51 +27,89 @@ ul {
 
 li {
     list-style: none;
-    border: 1px solid grey;    
+    border: 1px solid grey;
+    border-radius: 5px;
+
+    white-space: normal;
 }
 
 form {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
 }
 
+
+
 button {
-    width: 100px;
+width: 40px;
+height: 40px;
+}
+
+.icons {
+    margin: 10px 0;
+}
+
+.icons button {
+    margin-right: 5px;
+}
+
+.deletebtn {
+    width: 30px;
+    height: 30px;
+    align-self: flex-end;
+    border: none;
+    background-color: inherit;
+}
+
+.deletebtn:hover {
+    cursor: pointer;
 }
 
 .active {
-    border: none;
-    color: green;
-    border: 1px solid green;
-
-    padding: 0.5rem 0.25rem;
+    color: white;
+    background-color: black;
+    border: 1px solid black;
+    padding: 0.75rem;
+    font-weight: 600;
+    font-size: 1.125rem;
+    letter-spacing: 0.5px;
+    width: 75%;
+    margin-bottom: 12px;
 
 }
 
 .listitem {
     color: black;
-    border: 1px solid black;
-    padding: 0.5rem 0.25rem;
+    padding: 0.75rem;
+    font-weight: 600;
+    font-size: 1.125rem;
+    letter-spacing: 0.5px;
+    width: 75%;
+    margin-bottom: 12px;
+    border: 1px solid lightgrey;
+    background-color: white;
 
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .listitem:hover {
     cursor: pointer;
+    border: 1px solid grey
 }
 
 .title {
     display: flex;
-    justify-content: center;
     align-items: center;
 }
 
 .title input {
     margin: 20px 0;
-    height: 25px;
+    height: 19px;
 }
 
-.title h2 {
+.title h3 {
     margin-right: 5px;
 }
 
@@ -70,4 +119,9 @@ button {
 
 .titleInactive {
 display: none;
+}
+
+.checkicon {
+    margin-right: 5px;
+    border: 1px solid red;
 }

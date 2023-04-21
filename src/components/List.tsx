@@ -1,8 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, FormEvent } from "react";
+import { useListReducer } from "../Reducer";
+import ListItem from "./ListItem";
+
 import styles from "../styles/List.module.css";
 import { BiEdit } from "react-icons/bi";
-import ListItem from "./ListItem";
-import { useListReducer } from "../Reducer";
+import { GrCheckmark } from 'react-icons/gr'
+import { IoIosAddCircle } from 'react-icons/io'
+import { AiFillDelete } from 'react-icons/ai'
+import { BsFillDice5Fill } from 'react-icons/bs'
+
 
 interface ListProps {
   list: ListType;
@@ -58,26 +64,34 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
     titleRef.current?.focus()
   }, [editingTitle])
 
-  
+  useEffect(() => {
+    setTitleInputValue(list.name)
+  },[])
+
+
   const RandomNumber = (list: ListType): number => {
     return Math.floor(Math.random() * list.content.length);
   };
 
+  const handleTitleChange = (e: MouseEvent | FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    changeTitle(titleRef.current?.value ?? '')
+    setEditingTitle(false)
+  }
+
 
   return (
     <main className={styles.container}>
+      <button className={styles.deletebtn} onClick={() => deleteList(list.id)}>
+        X
+      </button>
+
       <form className={styles.title} action="submit"
-        onSubmit={(e) => {
-          e.preventDefault()
-          changeTitle(titleRef.current?.value ?? '')
-          setTitleInputValue('')
-          setEditingTitle(false)
-        }
-        }
-      >
-        <h2 className={editingTitle ? styles.titleInactive : styles.titleActive}>
+        onSubmit={(e) => handleTitleChange(e)}>
+
+        <h3 className={editingTitle ? styles.titleInactive : styles.titleActive}>
           {list?.name}
-        </h2>
+        </h3>
 
         <input
           className={editingTitle ? styles.titleActive : styles.titleInactive}
@@ -86,14 +100,17 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
           onChange={(e) => setTitleInputValue(e.target.value)}
           value={titleInputValue}
         />
-        <BiEdit onClick={() => {
+
+        <BiEdit className={editingTitle ? styles.titleInactive : styles.titleActive} onClick={() => {
           setEditingTitle(!editingTitle)
           titleRef.current?.focus()
         }
         } size={28} />
+
+        <GrCheckmark onClick={(e) => handleTitleChange(e)} className={editingTitle ? styles.titleActive && styles.checkicon : styles.titleInactive} size={26} />
+
       </form>
 
-      <button onClick={() => deleteList(list.id)}>X</button>
 
       <ul>
         {list.content.map((item, index) => (
@@ -114,21 +131,29 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
       >
         <input
           onChange={(e) => setItemInputValue(e.target.value)}
+          placeholder="Enter list item"
           type="text" value={itemInputValue} ref={itemRef} />
+
+
         <button onClick={() => {
           addItem(itemRef.current?.value ?? '')
           setItemInputValue('')
         }
-        }>Add Item</button>
+        }><IoIosAddCircle size={25} /></button>
+
+      </form>
+      <section className={styles.icons}>
         <button onClick={() => {
           deleteItem(selectedItem)
           setSelectedItem(null)
         }
-        }>Delete Item</button>
-        <button onClick={() => setSelectedItem(RandomNumber(list))}>
-          Roll
+        }><AiFillDelete size={25} />
         </button>
-      </form>
+
+        <button onClick={() => setSelectedItem(RandomNumber(list))}>
+          <BsFillDice5Fill size={25} />
+        </button>
+      </section>
     </main>
   );
 };

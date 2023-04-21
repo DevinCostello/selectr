@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import { v4 as uuidv4 } from 'uuid'
-import { BsPlusSquare } from 'react-icons/bs'
+import { GrAdd } from 'react-icons/gr'
 import List from "./components/List";
 
 interface ListType {
@@ -13,10 +13,6 @@ interface ListType {
 function App() {
 
 const [lists, setLists] = useState<ListType[] | null>(null);
-
-const [openNewList, setOpenNewList] = useState<boolean>(false)
-const newListRef = useRef<HTMLInputElement>(null);
-
 
   const testData = [
     {
@@ -44,23 +40,17 @@ const newListRef = useRef<HTMLInputElement>(null);
     } 
   }, []);
 
-  const createNewList = () => {
-
-    const newListRefValue = newListRef.current?.value ?? "";
-
-    if (newListRef.current) {
-      newListRef.current.value = "";
-    }
+  const createNewList = (): void => {
 
     if(lists) {
       setLists([...lists, {
-        name: newListRefValue,
+        name: "Add Title",
         id: uuidv4(),
         content: []
       }])
     } else {
       setLists([{
-        name: newListRefValue,
+        name: "Add Title",
         id: uuidv4(),
         content: []
       }])
@@ -83,17 +73,13 @@ const newListRef = useRef<HTMLInputElement>(null);
 
       {/* <button onClick={() => localStorage.setItem("lists", JSON.stringify(testData))}>Add</button>
       <button onClick={() => localStorage.removeItem("lists")}>Remove</button> */}
-
+  <section className="lists">
     {lists?.map((list, index) => <List key={list.id} list={list} lists={lists} setLists={setLists} deleteList={deleteList} />)}
-
-    <BsPlusSquare onClick={() => setOpenNewList(!openNewList)} size={24} />
-
-    <section className={openNewList ? "newlistopen": "newlist"}>
-      <form action="submit" onSubmit={(e) => e.preventDefault()}>
-        <input type="text" ref={newListRef} />
-        <button onClick={() => createNewList()}>Create New List</button>
-      </form>
-    </section>
+  </section>
+  
+  <span onClick={() => createNewList()} className='addbtn'>
+    <GrAdd size={26} />
+  </span>
 
     </main>
   );
