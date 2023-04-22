@@ -13,6 +13,8 @@ interface ListType {
 function App() {
 
 const [lists, setLists] = useState<ListType[] | null>(null);
+const [modal, setModal] = useState<boolean>(false)
+
 
   const testData = [
     {
@@ -73,6 +75,8 @@ const [lists, setLists] = useState<ListType[] | null>(null);
 
       {/* <button onClick={() => localStorage.setItem("lists", JSON.stringify(testData))}>Add</button>
       <button onClick={() => localStorage.removeItem("lists")}>Remove</button> */}
+
+
   <section className="lists">
     {lists?.map((list, index) => <List key={list.id} list={list} lists={lists} setLists={setLists} deleteList={deleteList} />)}
   </section>

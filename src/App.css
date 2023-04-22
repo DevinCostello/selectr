@@ -2,21 +2,45 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+
+  --primary-1: #f1f8f4;
+  --primary-2: #dcefe2;
+  --primary-3: #bcdec9;
+  --primary-4: #8fc6a9;
+  --primary-5: #65ab88;
+  --primary-6: #3e8b68;
+  --primary-7: #2c6f51;
+  --primary-8: #235942;
+  --primary-9: #1e4735;
+  --primary-10: #1a3a2e;
+
+  background-color: var(--primary-3);
+
 }
 
 .App {
   display: flex;
+  justify-content: center;
   align-items: center;
+
+  width: 100vw;
+  height: 100vh;
+
 
 }
 
 .lists {
 
-  max-width: 1362px;
+  max-width: 1410px;
   display: flex;
   align-items: flex-start;
   flex-wrap: wrap;
 
+  /* display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 30px; */
+
+  /* border: 1px solid red; */
 
 }
 
@@ -24,14 +48,19 @@
   border-radius: 100px;
   height: 50px;
   width: 50px;
-
-  border: 1px solid lightgrey;
-
+  margin-left: 20px;
+  
   display: flex;
   justify-content: center;
   align-items: center;
+  
+  background-color: white;
+  border: 1px solid grey;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  position: relative;
+  right: 30px;
+
 }
 
 .addbtn:hover {

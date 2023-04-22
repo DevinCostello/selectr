@@ -5,9 +5,8 @@ import ListItem from "./ListItem";
 import styles from "../styles/List.module.css";
 import { BiEdit } from "react-icons/bi";
 import { GrCheckmark } from 'react-icons/gr'
-import { IoIosAddCircle } from 'react-icons/io'
-import { AiFillDelete } from 'react-icons/ai'
-import { BsFillDice5Fill } from 'react-icons/bs'
+import { MdDelete } from 'react-icons/md'
+import { BsFillDice5Fill, BsPlusSquareFill } from 'react-icons/bs'
 
 
 interface ListProps {
@@ -26,6 +25,7 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
 
   const [editingTitle, setEditingTitle] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false)
+  const [modal, setModal] = useState<boolean>(false)
   const [selectedItem, setSelectedItem] = useState<number | null>(null);
 
   const titleRef = useRef<HTMLInputElement>(null);
@@ -66,25 +66,44 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
 
   useEffect(() => {
     setTitleInputValue(list.name)
-  },[])
+  }, [])
 
 
   const RandomNumber = (list: ListType): number => {
     return Math.floor(Math.random() * list.content.length);
   };
 
-  const handleTitleChange = (e: MouseEvent | FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    changeTitle(titleRef.current?.value ?? '')
-    setEditingTitle(false)
+  const handleTitleChange = (e: React.MouseEvent<HTMLButtonElement> | FormEvent<HTMLFormElement>) => {
+
+    if(editingTitle) {
+      e.preventDefault()
+      changeTitle(titleRef.current?.value ?? '')
+      setEditingTitle(false)
+    }
   }
 
+  const handleDeleteList = (list: ListType) => {
+    if (list.name === "Add Title" && list.content.length === 0) { deleteList(list.id) } else {
+      setModal(true)
+    }
+  }
 
   return (
     <main className={styles.container}>
-      <button className={styles.deletebtn} onClick={() => deleteList(list.id)}>
+
+      <button className={styles.deletebtn} onClick={() => handleDeleteList(list)}>
         X
       </button>
+
+
+      {/* modal */}
+      <section className={modal ? styles.active_modal : styles.modal}>
+        <span className={styles.modal_content}>
+          <h4>Are you sure you want to delete this list?</h4>
+          <button onClick={() => deleteList(list.id)}>Yes</button>
+          <button onClick={() => setModal(false)}>No</button>
+        </span>
+      </section>
 
       <form className={styles.title} action="submit"
         onSubmit={(e) => handleTitleChange(e)}>
@@ -101,16 +120,22 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
           value={titleInputValue}
         />
 
-        <BiEdit className={editingTitle ? styles.titleInactive : styles.titleActive} onClick={() => {
-          setEditingTitle(!editingTitle)
-          titleRef.current?.focus()
-        }
-        } size={28} />
 
-        <GrCheckmark onClick={(e) => handleTitleChange(e)} className={editingTitle ? styles.titleActive && styles.checkicon : styles.titleInactive} size={26} />
+        <button onClick={(e) => handleTitleChange(e)} className={editingTitle ? styles.titleActive && styles.checkicon : styles.titleInactive}>
+          <GrCheckmark size={26} />
+        </button>
+
+
+        <button className={editingTitle ? styles.titleInactive : styles.titleActive}
+          onClick={() => {
+            setEditingTitle(!editingTitle)
+            titleRef.current?.focus()
+          }
+          }>
+          <BiEdit size={28} />
+        </button>
 
       </form>
-
 
       <ul>
         {list.content.map((item, index) => (
@@ -131,27 +156,28 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
       >
         <input
           onChange={(e) => setItemInputValue(e.target.value)}
-          placeholder="Enter list item"
           type="text" value={itemInputValue} ref={itemRef} />
-
 
         <button onClick={() => {
           addItem(itemRef.current?.value ?? '')
           setItemInputValue('')
-        }
-        }><IoIosAddCircle size={25} /></button>
+        }}>
+          <BsPlusSquareFill
+            size={35} />
+        </button>
 
       </form>
       <section className={styles.icons}>
-        <button onClick={() => {
+
+        <button className={styles.deleteitembtn} onClick={() => {
           deleteItem(selectedItem)
           setSelectedItem(null)
-        }
-        }><AiFillDelete size={25} />
+        }} >
+          <MdDelete size={35} />
         </button>
 
-        <button onClick={() => setSelectedItem(RandomNumber(list))}>
-          <BsFillDice5Fill size={25} />
+        <button>
+          <BsFillDice5Fill onClick={() => setSelectedItem(RandomNumber(list))} size={39} />
         </button>
       </section>
     </main>
