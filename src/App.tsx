@@ -14,6 +14,9 @@ function App() {
 
 const [lists, setLists] = useState<ListType[] | null>(null);
 const [modal, setModal] = useState<boolean>(false)
+const [listlayout, setListLayout] = useState<boolean>(false)
+const [listlength, setListLength] = useState<number | null>(null)
+
 
 
   const testData = [
@@ -41,6 +44,16 @@ const [modal, setModal] = useState<boolean>(false)
       setLists(JSON.parse(ListInStorage))
     } 
   }, []);
+
+  useEffect(() => {
+
+    if(lists) {
+      setListLength(lists.length);
+    }
+
+  },[lists])
+
+
 
   const createNewList = (): void => {
 
@@ -70,19 +83,28 @@ const [modal, setModal] = useState<boolean>(false)
       }
   }
 
+  
+
   return (
     <main className="App">
 
       {/* <button onClick={() => localStorage.setItem("lists", JSON.stringify(testData))}>Add</button>
       <button onClick={() => localStorage.removeItem("lists")}>Remove</button> */}
 
+      {/* <h2>Selectr.</h2> */}
 
-  <section className="lists">
-    {lists?.map((list, index) => <List key={list.id} list={list} lists={lists} setLists={setLists} deleteList={deleteList} />)}
+  <section className={listlength ? `lists${listlength}` : "lists"}>
+    {lists ? 
+    lists?.map((list) => <List key={list.id} list={list} lists={lists} setLists={setLists} deleteList={deleteList} />)
+    :
+    <h2>Add a list by clicking here!</h2>
+  }
   </section>
   
   <span onClick={() => createNewList()} className='addbtn'>
+    <button>
     <GrAdd size={26} />
+    </button>
   </span>
 
     </main>

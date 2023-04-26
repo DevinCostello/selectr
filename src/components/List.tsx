@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, FormEvent } from "react";
 import { useListReducer } from "../Reducer";
 import ListItem from "./ListItem";
 
+// css/icons
 import styles from "../styles/List.module.css";
 import { BiEdit } from "react-icons/bi";
 import { GrCheckmark } from 'react-icons/gr'
