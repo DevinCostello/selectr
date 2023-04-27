@@ -5,16 +5,12 @@
     background-color: white;
     border: 1px solid lightgrey;
     border-radius: 5px;
-    width: 250px;
+    width: 300px;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 
-    /* margin: 0 10px 20px; */
-   
-
-/* debating this */
-    max-height: 550px;
+    /* max-height: 550px;
     min-height: 500px;
-    overflow: auto;
+    overflow: auto; */
 
 }
 
@@ -30,8 +26,7 @@ li {
     list-style: none;
     border: 1px solid grey;
     border-radius: 5px;
-
-    word-break: break-all;
+    word-break: break-word;
 }
 
 form {

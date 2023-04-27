@@ -27,60 +27,53 @@
   background-color: var(--primary-3);
   font-family: 'Poppins', Arial, Helvetica, sans-serif;
 
-
-
-
   display: flex;
   justify-content: center;
+  align-items: center;
+  
+  
 
-  width: 100%;
-  border: 1px solid red;
+  min-height: 100vh;
+  width: 100vw;
+
 
 }
 
+.logo {
+  display: flex;
+  justify-self: flex-end;
+  align-self: flex-start;
+  position: absolute;
+  left: 50px;
+  top: 10px
+}
 
+.dot {
+  color: var(--primary-8);
+}
 
 .App {
-
-
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: inherit; 
 
-  /* height: 100%; */
+
   
-  /* border: 1px solid red; */
-
 }
-
-
 
 .lists {
-  /* max-width: 1410px;
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap; */
-
-
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 25px;
-
-
-  /* height: 1050px; */
-  /* height: 100%; */
-
   background-color: inherit; 
-
-}
-
-.lists4{
+  margin-top: 150px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 25px;
-  height: 100%
+  gap: 20px;
+
+  border: 1px solid red;
+
 }
+
+
 
 .addbtn {
   border-radius: 100px;
@@ -97,6 +90,8 @@
   border: 1px solid grey;
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 
+  position: sticky;
+  top: 15px;
 
 }
 
@@ -110,53 +105,35 @@
 }
 
 
-/* 1450px - 1200px */
-@media only screen and (max-width: 1450px) {
-  
+/* 1700px - 1200px */
+@media only screen and (max-width: 1700px) {
   .lists {
     grid-template-columns: repeat(4, 1fr);
   }
-  
-  .lists4 {
-    height: 750px;
-  }
-
-   
 }
 
  /* smaller desktops, laptops, landscape tablets 992px - 1200px*/
  @media only screen and (max-width: 1200px) {
-
-  .lists, .lists4 {
+  .lists {
     grid-template-columns: repeat(3, 1fr);
   }
-
-  .lists4 {
-    height: 100%;
-  }
-
-  
-     
  }
 
 /* portrait tablets, landscape phones 768px - 992px */
  @media only screen and (max-width: 992px) {
-
-  .lists, .lists4 {
+  .lists {
     grid-template-columns: repeat(2, 1fr);
   }
  }
 /*landscape phones 600px - 768px */
  @media only screen and (max-width: 768px) {
-
+  .lists {
+    grid-template-columns: 1fr;
+  }
  }
 
 /* larger portrait phones, 500px - 600px */
  @media only screen and (max-width: 600px) {
-
-.lists, .lists4{
-  grid-template-columns: 1fr;
-}
 
 }
 
