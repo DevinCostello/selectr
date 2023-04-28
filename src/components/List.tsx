@@ -34,6 +34,8 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
   const itemRef = useRef<HTMLInputElement>(null);
   const [itemInputValue, setItemInputValue] = useState<string>('')
 
+  const modalRef = useRef<HTMLDivElement>(null)
+
   const { state: reducerState, addItem, deleteItem, changeTitle } = useListReducer(list)
 
 
@@ -74,40 +76,47 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
     return Math.floor(Math.random() * list.content.length);
   };
 
-  const handleTitleChange = (e: React.MouseEvent<HTMLButtonElement> | FormEvent<HTMLFormElement>) => {
+  const handleTitleChange = (e: React.MouseEvent<HTMLButtonElement> | FormEvent<HTMLInputElement>) => {
 
-    if(editingTitle) {
+    if (editingTitle) {
       e.preventDefault()
       changeTitle(titleRef.current?.value ?? '')
       setEditingTitle(false)
     }
   }
 
-  const handleDeleteList = (list: ListType) => {
+  const openModal = () => {
+
     if (list.name === "Add Title" && list.content.length === 0) { deleteList(list.id) } else {
       setModal(true)
+    }
+
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (modalRef.current) {
+      modalRef.current.style.top = scrollTop + 'px';
     }
   }
 
   return (
     <main className={styles.container}>
 
-      <button className={styles.deletebtn} onClick={() => handleDeleteList(list)}>
+      <button className={styles.deletebtn} onClick={() => openModal()}>
         X
       </button>
 
 
       {/* modal */}
-      <section className={modal ? styles.active_modal : styles.modal}>
+      <section ref={modalRef} className={modal ? styles.active_modal : styles.modal}>
         <span className={styles.modal_content}>
-          <h4>Are you sure you want to delete this list?</h4>
+          <h2>Are you sure you want to delete this list?</h2>
           <button onClick={() => deleteList(list.id)}>Yes</button>
           <button onClick={() => setModal(false)}>No</button>
         </span>
       </section>
 
       <form className={styles.title} action="submit"
-        onSubmit={(e) => handleTitleChange(e)}>
+        onSubmit={(e) => e.preventDefault()}>
 
         <h3 className={editingTitle ? styles.titleInactive : styles.titleActive}>
           {list?.name}
@@ -117,6 +126,7 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
           className={editingTitle ? styles.titleActive : styles.titleInactive}
           type="text"
           ref={titleRef}
+          onSubmit={(e) => handleTitleChange(e)}
           onChange={(e) => setTitleInputValue(e.target.value)}
           value={titleInputValue}
         />
@@ -151,20 +161,20 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
       </ul>
 
       <form
-        className={styles.contentform}
-        action="submit"
-        onSubmit={(e) => e.preventDefault()}
-      >
+        className={styles.contentform} action="submit" onSubmit={(e) => e.preventDefault()}>
+
         <input
           onChange={(e) => setItemInputValue(e.target.value)}
-          type="text" value={itemInputValue} ref={itemRef} />
+          type="text"
+          value={itemInputValue}
+          ref={itemRef}
+        />
 
         <button onClick={() => {
-          addItem(itemRef.current?.value ?? '')
+          addItem(itemRef.current?.value ?? '1')
           setItemInputValue('')
         }}>
-          <BsPlusSquareFill
-            size={35} />
+          <BsPlusSquareFill size={35} />
         </button>
 
       </form>

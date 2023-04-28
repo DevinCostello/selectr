@@ -21,11 +21,11 @@ if(selectedItem === index) {
 
   return (
     <>
-    <li
-    onClick={() => handleClick(index)}
-    className={index === selectedItem ? styles.listitem_active : styles.listitem}>
-      {item}
-    </li>
+        <li
+        onClick={() => handleClick(index)}
+        className={index === selectedItem ? styles.listitem_active : styles.listitem}>
+          {item}
+        </li>
     </>
   )
 }
