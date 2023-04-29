@@ -1,4 +1,4 @@
-# Selectr.
+# [Selectr.](https://selectr.onrender.com/)
 
 Selectr is a simple 'To-Do' or list making app, where the user can choose a random item in each list. 
 This would be most helpful for people who are indecisive and can't choose what movie to watch, book to read, etc.
