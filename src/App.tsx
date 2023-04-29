@@ -13,7 +13,6 @@ interface ListType {
 function App() {
 
 const [lists, setLists] = useState<ListType[] | null>(null);
-const [modal, setModal] = useState<boolean>(false)
 
   useEffect(() => {
     const ListInStorage = localStorage.getItem('lists')
@@ -46,7 +45,9 @@ const [modal, setModal] = useState<boolean>(false)
 
      const deletedLists = lists?.filter((list) => list.id !== id) 
 
-    setLists(deletedLists)
+    if(deletedLists) {
+      setLists(deletedLists)
+    }
 
     if(lists?.length === 1
       ) {

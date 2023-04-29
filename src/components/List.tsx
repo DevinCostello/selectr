@@ -85,14 +85,35 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
     }
   }
 
+  const handleAddItem = () => {
+
+    if (itemRef.current?.value !== '') {
+      addItem(itemRef.current?.value ?? '')
+      setItemInputValue('')
+    }
+
+    
+
+  }
+
+  const handleDeleteItem = () => {
+
+    if(selectedItem || selectedItem === 0) {
+      deleteItem(selectedItem)
+      setSelectedItem(null)
+    }
+
+  }
+
   const openModal = () => {
 
+    //if user tries to delete empty list that was just added, they wont be forced to click 'yes' on the 'are you sure?' modal
     if (list.name === "Add Title" && list.content.length === 0) { deleteList(list.id) } else {
       setModal(true)
     }
 
+    //centers modal on the screen regardless of scroll position
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
     if (modalRef.current) {
       modalRef.current.style.top = scrollTop + 'px';
     }
@@ -115,6 +136,7 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
         </span>
       </section>
 
+    {/* title form */}
       <form className={styles.title} action="submit"
         onSubmit={(e) => e.preventDefault()}>
 
@@ -160,6 +182,7 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
         ))}
       </ul>
 
+    {/* new item form */}
       <form
         className={styles.contentform} action="submit" onSubmit={(e) => e.preventDefault()}>
 
@@ -170,20 +193,14 @@ const List = ({ list, lists, setLists, deleteList }: ListProps) => {
           ref={itemRef}
         />
 
-        <button onClick={() => {
-          addItem(itemRef.current?.value ?? '1')
-          setItemInputValue('')
-        }}>
+        <button onClick={() => handleAddItem()}>
           <BsPlusSquareFill size={35} />
         </button>
 
       </form>
       <section className={styles.icons}>
 
-        <button className={styles.deleteitembtn} onClick={() => {
-          deleteItem(selectedItem)
-          setSelectedItem(null)
-        }} >
+        <button className={styles.deleteitembtn} onClick={() => handleDeleteItem()}>
           <MdDelete size={35} />
         </button>
 
